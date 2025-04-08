@@ -42,7 +42,6 @@ class _HomeState extends State<Home> {
                           alignment: Alignment.topLeft,
                           child: Padding(
                             padding: EdgeInsets.only(top: 10),
-                            child: BackButton(color: Colors.white),
                           ),
                         ),
                       ),
