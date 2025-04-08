@@ -1,21 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:party_app/screens/email_verification.dart';
+import 'package:party_app/screens/home_screen.dart';
 import 'package:party_app/widgets/authentication.dart';
 import 'package:party_app/widgets/gradient_background.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UsuarioRegister extends StatefulWidget {
-  const UsuarioRegister({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
   @override
-  State<UsuarioRegister> createState() => _UsuarioRegisterState();
+  State<Login> createState() => _LoginState();
 }
 
-class _UsuarioRegisterState extends State<UsuarioRegister> {
+class _LoginState extends State<Login> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final nameController = TextEditingController();
-  final lastNameController = TextEditingController();
 
   final auth = AuthService();
 
@@ -23,8 +23,7 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    nameController.dispose();
-    lastNameController.dispose();
+
     super.dispose();
   }
 
@@ -43,7 +42,7 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const SizedBox(
+                     const SizedBox(
                         child: const Align(
                           alignment: Alignment.topLeft,
                           child: Padding(
@@ -53,31 +52,19 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                         ),
                       ),
                       SizedBox(
-                        height: screenHeight * 0.3,
+                        height: screenHeight * 0.4,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 100),
+                          padding: const EdgeInsets.only(top: 50),
                           child: Image.asset(
                             'assets/logo_title.png',
-                            height: 220,
+                            height: 300,
                             width: 300,
                           ),
                         ),
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 40),
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
+                        padding: const EdgeInsets.only(top: 40),
                         child: Column(
                           children: [
                             Padding(
@@ -93,9 +80,7 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                                   hintStyle: GoogleFonts.biryani(
                                       color: Colors.white, fontSize: 15),
                                   enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color:
-                                            Color.fromARGB(255, 206, 205, 205)),
+                                    borderSide: BorderSide(color: Colors.white),
                                   ),
                                   focusedBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
@@ -119,9 +104,7 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                                   hintStyle: GoogleFonts.biryani(
                                       color: Colors.white, fontSize: 15),
                                   enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color:
-                                            Color.fromARGB(255, 206, 205, 205)),
+                                    borderSide: BorderSide(color: Colors.white),
                                   ),
                                   focusedBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
@@ -131,82 +114,55 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                                 ),
                               ),
                             ),
+                            TextButton(
+                                onPressed: () {},
+                                child: Text('Olvide mi contraseña',
+                                    style: GoogleFonts.biryani(
+                                        color: Colors.white,
+                                        fontSize: 15,
+                                        fontStyle: FontStyle.italic,
+                                        fontWeight: FontWeight.bold))),
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 20, left: 20, right: 20),
-                              child: TextField(
-                                controller: nameController,
-                                cursorColor: Colors.white,
-                                style: GoogleFonts.biryani(color: Colors.white),
-                                decoration: InputDecoration(
-                                  hintText: 'nombre(s)',
-                                  hintStyle: GoogleFonts.biryani(
-                                      color: Colors.white, fontSize: 15),
-                                  enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color:
-                                            Color.fromARGB(255, 206, 205, 205)),
-                                  ),
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                  ),
-                                  prefixIcon: const Icon(Icons.person_2_rounded,
-                                      color: Colors.white),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 20, left: 20, right: 20),
-                              child: TextField(
-                                controller: lastNameController,
-                                cursorColor: Colors.white,
-                                style: GoogleFonts.biryani(color: Colors.white),
-                                decoration: InputDecoration(
-                                  hintText: 'apellido(s)',
-                                  hintStyle: GoogleFonts.biryani(
-                                      color: Colors.white, fontSize: 15),
-                                  enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color:
-                                            Color.fromARGB(255, 206, 205, 205)),
-                                  ),
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
-                                  ),
-                                  prefixIcon: const Icon(Icons.person_2_rounded,
-                                      color: Colors.white),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 40.0),
+                              padding: const EdgeInsets.only(top: 20.0),
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  final result = await auth.registerWithEmail(
-                                      emailController.text,
-                                      passwordController.text,
-                                      context);
+                                  final result = await auth.signInWithEmail(
+                                    emailController.text,
+                                    passwordController.text,
+                                  );
 
                                   if (result != null) {
-                                    final user = result.user;
+                                    await FirebaseAuth.instance.currentUser
+                                        ?.reload();
+                                    final user =
+                                        FirebaseAuth.instance.currentUser;
 
-                                    if (user != null && !user.emailVerified) {
-                                      await user.sendEmailVerification();
+                                    if (user != null && user.emailVerified) {
+                                      // Todo bien, va al Home
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => const Home()),
+                                      );
+                                    } else {
+                                      // Correo no verificado
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        SnackBar(
+                                        const SnackBar(
                                             content: Text(
-                                                'Se envió un correo de verificación a ${user.email}')),
+                                                "Por favor, verifica tu correo antes de ingresar.")),
                                       );
+                                      Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => EmailVerification()),
+);
                                     }
-
-                                    print(
-                                        "Registro exitoso. UID: ${result.user?.uid}");
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const EmailVerification()),
+                                  } else {
+                                    // Error de login
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              "Correo o contraseña incorrectos.")),
                                     );
                                   }
                                 },
@@ -218,7 +174,7 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                                   ),
                                 ),
                                 child: Text(
-                                  'enviar',
+                                  'iniciar sesion',
                                   style: GoogleFonts.biryani(
                                       color: Colors.white, fontSize: 20),
                                 ),

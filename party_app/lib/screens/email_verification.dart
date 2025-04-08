@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:party_app/screens/usuario_register_screen.dart';
+import 'package:party_app/screens/home_screen.dart';
 import 'package:party_app/widgets/gradient_background.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class CodeVerification extends StatefulWidget {
-  const CodeVerification({super.key});
+class EmailVerification extends StatefulWidget {
+  const EmailVerification({super.key});
 
   @override
-  State<CodeVerification> createState() => _CodeVerificationState();
+  State<EmailVerification> createState() => _EmailVerificationState();
 }
 
-class _CodeVerificationState extends State<CodeVerification> {
+class _EmailVerificationState extends State<EmailVerification> {
   final codeController = TextEditingController();
 
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -66,7 +66,7 @@ class _CodeVerificationState extends State<CodeVerification> {
                         child: Column(
                           children: [
                             Text(
-                              'Hemos enviado un enlace de verificacion a tu correo. \n \n Ya verificaste tu corre?',
+                              'Hemos enviado un enlace de verificacion a tu correo. \n \n Ya verificaste tu correo?',
                               style: GoogleFonts.biryani(
                                   color: Colors.white, fontSize: 18),
                             ),
@@ -83,8 +83,7 @@ class _CodeVerificationState extends State<CodeVerification> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) =>
-                                                const UsuarioRegister()));
+                                            builder: (_) => const Home()));
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
