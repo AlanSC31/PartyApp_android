@@ -17,6 +17,7 @@ public class Grupo{
     private String password;
     private String genre;
     private Double rate;
+    private String type;
 
     // Getters and Setters
 
@@ -68,8 +69,17 @@ public class Grupo{
         this.rate = rate;
     }
 
+    public String getType(){
+        return type;
+    }
 
+    public void setType(String type){
+        this.type = type;
+    }
 }
+
+
+
 
 
 
