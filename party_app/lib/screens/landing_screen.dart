@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:party_app/screens/config/changeIpScreen.dart';
 import 'package:party_app/screens/login_screen.dart';
 import 'package:party_app/screens/register_screen.dart';
 import 'package:party_app/widgets/gradient_background.dart';
@@ -12,6 +13,29 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
+  int _tapCounter = 0;
+  DateTime? _lastTapTime;
+
+  void _handleLogoTap() {
+    final now = DateTime.now();
+
+    if (_lastTapTime == null || now.difference(_lastTapTime!) > Duration(seconds: 2)) {
+      _tapCounter = 1;
+    } else {
+      _tapCounter++;
+    }
+
+    _lastTapTime = now;
+
+    if (_tapCounter == 5) {
+      _tapCounter = 0;
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SettingsPage()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -33,10 +57,13 @@ class _LandingScreenState extends State<LandingScreen> {
                           height: screenHeight * 0.5,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 50),
-                            child: Image.asset(
-                              'assets/logo_title.png',
-                              height: 300,
-                              width: 300,
+                            child: GestureDetector(
+                              onTap: _handleLogoTap,
+                              child: Image.asset(
+                                'assets/logo_title.png',
+                                height: 300,
+                                width: 300,
+                              ),
                             ),
                           ),
                         ),

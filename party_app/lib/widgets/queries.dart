@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:party_app/screens/config/ipChange.dart';
 
 class Queries {
-  static String ip = '10.0.2.2'; //localhost: 10.0.2.2
-  static String usuarioUrl = 'http://$ip:8082/users'; // usuarios endpoint
-  static String grupoUrl = 'http://$ip:8082/groups';  // grupos endpoint 
+  // static String ip = '10.0.2.2'; //localhost: 10.0.2.2
+  // static String grupoUrl = 'http://$ip:8082/groups';  // grupos endpoint 
 
   // GESTION DE USUARIOS ENDPOINTS
 
@@ -16,6 +16,9 @@ class Queries {
     required String password,
     required String tipo
   }) async {
+    
+    final ip = await BackendConfig.getBackendIp();
+    final String usuarioUrl = 'http://$ip:8082/users'; // usuarios endpoint
     final url = Uri.parse('$usuarioUrl/usuario-register');
 
     final body = jsonEncode({
@@ -29,6 +32,7 @@ class Queries {
     final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',
+          // 'uthorization': basicAuth,
         },
         body: body);
 
@@ -50,6 +54,8 @@ class Queries {
     required String tipo,
     required double rate,
   }) async {
+    final ip = await BackendConfig.getBackendIp();
+    final String grupoUrl = 'http://$ip:8082/groups';  // grupos endpoint 
     final url = Uri.parse('$grupoUrl/grupo-register');
 
     final body = jsonEncode({
