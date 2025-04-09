@@ -183,6 +183,7 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                               padding: const EdgeInsets.only(top: 40.0),
                               child: ElevatedButton(
                                 onPressed: () async {
+                                  
                                   final result = await auth.registerWithEmail(
                                       emailController.text,
                                       passwordController.text,
@@ -206,7 +207,8 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const EmailVerification()),
+                                          builder: (context) =>
+                                              const EmailVerification()),
                                     );
                                   }
                                 },

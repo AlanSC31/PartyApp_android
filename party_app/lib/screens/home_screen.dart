@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:party_app/screens/login_screen.dart';
 import 'package:party_app/widgets/gradient_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:party_app/widgets/queries.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,6 +16,7 @@ class _HomeState extends State<Home> {
   final codeController = TextEditingController();
 
   FirebaseAuth auth = FirebaseAuth.instance;
+  Queries queries = Queries();
 
   @override
   void dispose() {
@@ -60,12 +62,12 @@ class _HomeState extends State<Home> {
                           style: GoogleFonts.biryani(
                               color: Colors.white, fontSize: 40)),
                       ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             try {
                               auth.signOut();
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text('se cerro la sesion')),
+                                    content: Text('se cerró la sesión')),
                               );
                               Navigator.pushReplacement(
                                 context,
