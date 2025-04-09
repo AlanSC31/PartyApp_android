@@ -29,15 +29,14 @@ class Queries {
     final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',
-          // 'uthorization': basicAuth,
         },
         body: body);
 
     if (response.statusCode == 200) {
-      return true; // Registro exitoso
+      return true; 
     } else {
       print('Error: ${response.statusCode} - ${response.body}');
-      return false; // Error en el registro
+      return false; 
     }
   }
 
@@ -65,15 +64,14 @@ class Queries {
     final response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',
-          // 'uthorization': basicAuth,
         },
         body: body);
 
     if (response.statusCode == 200) {
-      return true; // Registro exitoso
+      return true; 
     } else {
       print('Error: ${response.statusCode} - ${response.body}');
-      return false; // Error en el registro
+      return false; 
     }
   }
 }

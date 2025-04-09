@@ -58,7 +58,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                       ),
-                      Text('USUARIO HOME',
+                      Text('HOME SCREEN',
                           style: GoogleFonts.biryani(
                               color: Colors.white, fontSize: 40)),
                       ElevatedButton(

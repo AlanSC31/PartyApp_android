@@ -3,6 +3,7 @@ import 'package:party_app/screens/email_verification.dart';
 import 'package:party_app/widgets/authentication.dart';
 import 'package:party_app/widgets/gradient_background.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:party_app/widgets/queries.dart';
 
 class UsuarioRegister extends StatefulWidget {
   const UsuarioRegister({super.key});
@@ -44,7 +45,7 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                   child: Column(
                     children: [
                       const SizedBox(
-                        child: const Align(
+                        child: Align(
                           alignment: Alignment.topLeft,
                           child: Padding(
                             padding: EdgeInsets.only(top: 10),
@@ -55,7 +56,7 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                       SizedBox(
                         height: screenHeight * 0.3,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 100),
+                          padding: const EdgeInsets.only(top: 1),
                           child: Image.asset(
                             'assets/logo_title.png',
                             height: 220,
@@ -183,37 +184,59 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                               padding: const EdgeInsets.only(top: 40.0),
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  
-                                  final result = await auth.registerWithEmail(
-                                      emailController.text,
-                                      passwordController.text,
-                                      context);
+                                  if (emailController.text.isNotEmpty &&
+                                      passwordController.text.isNotEmpty &&
+                                      nameController.text.isNotEmpty &&
+                                      lastNameController.text.isNotEmpty) {
+                                    final result = await auth.registerWithEmail(
+                                        emailController.text,
+                                        passwordController.text,
+                                        context);
 
-                                  if (result != null) {
-                                    final user = result.user;
+                                    if (result != null) {
+                                      final user = result.user;
 
-                                    if (user != null && !user.emailVerified) {
-                                      await user.sendEmailVerification();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Se envió un correo de verificación a ${user.email}')),
-                                      );
+                                      if (user != null && !user.emailVerified) {
+                                        await user.sendEmailVerification();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'Se envió un correo de verificación a ${user.email}')),
+                                        );
+                                      }
+                                      bool userReg =
+                                          await Queries.usuarioRegister(
+                                              email: emailController.text,
+                                              nombre: nameController.text,
+                                              apellido: lastNameController.text,
+                                              password: passwordController.text,
+                                              tipo: 'usuario');
+
+                                      if (userReg) {
+                                        print(
+                                            "Registro exitoso. UID: ${result.user?.uid}");
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const EmailVerification()),
+                                        );
+                                      }
                                     }
-
-                                    print(
-                                        "Registro exitoso. UID: ${result.user?.uid}");
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const EmailVerification()),
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content:
+                                            Text('Completa todos los campos'),
+                                        duration: Duration(seconds: 2),
+                                      ),
                                     );
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white.withOpacity(.2),
+                                  backgroundColor: Colors.white.withOpacity(.4),
                                   fixedSize: Size(screenWidth * 0.7, 50),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),

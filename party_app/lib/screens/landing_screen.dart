@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:party_app/screens/login_screen.dart';
-import 'package:party_app/screens/usuario_register_screen.dart';
+import 'package:party_app/screens/register_screen.dart';
+import 'package:party_app/widgets/gradient_background.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -14,185 +15,112 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
+    double screenHeight = MediaQuery.of(context).size.height;
     return MaterialApp(
       title: 'PartyApp',
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Container(
-            width: 500,
-            height: 900,
-            clipBehavior: Clip.antiAlias,
-            decoration: ShapeDecoration(
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF405DE6),
-                  Color(0xFF465AE3),
-                  Color(0xFF4C57E1),
-                  Color(0xFF6748CA),
-                  Color(0xFF943EA7),
-                  Color(0xFFC82D62),
-                  Color(0xFFE2253F),
-                  Color(0xFFEC4E3B),
-                  Color(0xFFF47E40),
-                  Color(0xFFFFDC80)
-                ],
+        resizeToAvoidBottomInset: true,
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: GradientBackground(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: screenHeight * 0.5,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 50),
+                            child: Image.asset(
+                              'assets/logo_title.png',
+                              height: 300,
+                              width: 300,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 10),
+                          child: Text(
+                              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor',
+                              style: GoogleFonts.biryani(color: Colors.white)),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 30),
+                          child: Divider(
+                            color: Colors.white,
+                            thickness: 1,
+                            indent: 40,
+                            endIndent: 40,
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 40),
+                          padding: const EdgeInsets.only(top: 40),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 40, left: 20, right: 20),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const Login()),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Colors.white.withOpacity(.4),
+                                    fixedSize: Size(screenWidth * 0.7, 50),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'iniciar sesión',
+                                    style: GoogleFonts.biryani(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 40, left: 20, right: 20),
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => const RegisterScreen()),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        Colors.white.withOpacity(.4),
+                                    fixedSize: Size(screenWidth * 0.7, 50),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'registrarme',
+                                    style: GoogleFonts.biryani(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(0),
-              ),
-            ),
-            child: Stack(
-              children: [
-                // Título "PartyApp"
-                Positioned(
-                  left: 75,
-                  top: 250,
-                  child: SizedBox(
-                    width: 400,
-                    height: 70,
-                    child: Text(
-                      'PartyApp',
-                      style: GoogleFonts.kronaOne(
-                          textStyle: const TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    ),
-                  ),
-                ),
-                // Imagen del logo
-                Positioned(
-                  left: 100,
-                  top: 273,
-                  child: Container(
-                    width: 200,
-                    height: 200,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/PartyAppLogo.png"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-                // Espacio reservado (SizedBox)
-                const Positioned(
-                  left: 50,
-                  top: 60,
-                  child: SizedBox(width: 500, height: 472),
-                ),
-                // Botón "Iniciar sesion"
-                Positioned(
-                  left: 35,
-                  top: 600,
-                  child: Container(
-                    width: 330,
-                    height: 65,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const Login()),
-                        );
-                      },
-                      child: Text(''),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(.3),
-                        fixedSize: Size(screenWidth * 0.7, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // Texto Boton Iniciar Sesion
-                Positioned(
-                  left: 115,
-                  top: 620,
-                  child: SizedBox(
-                    width: 230,
-                    height: 40,
-                    child: Text(
-                      'Iniciar sesion',
-                      style: GoogleFonts.biryani(
-                        color: Color(0xFFFBF8F8),
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                // Botón "Registrarme"
-                Positioned(
-                  left: 35,
-                  top: 700,
-                  child: Container(
-                    width: 330,
-                    height: 65,
-                    child: ElevatedButton(
-                      onPressed: () {
-                                                Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const UsuarioRegister()),
-                        );
-                      },
-                      child: Text(''),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(.3),
-                        fixedSize: Size(screenWidth * 0.7, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                    ),
-                    decoration: ShapeDecoration(
-                      color: const Color(0x33FFF7F7),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                  ),
-                ),
-                //Texto Boton Registrarme
-                Positioned(
-                  left: 115,
-                  top: 720,
-                  child: Text(
-                    'Registrarme',
-                    style: GoogleFonts.biryani(
-                      color: Color(0xFFFBF8F8),
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                // Línea decorativa
-                Positioned(
-                  left: 20,
-                  top: 550,
-                  child: Container(
-                    width: 355,
-                    decoration: const ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          width: 1,
-                          strokeAlign: BorderSide.strokeAlignCenter,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            ],
           ),
         ),
       ),

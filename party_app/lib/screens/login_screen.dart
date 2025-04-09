@@ -42,7 +42,7 @@ class _LoginState extends State<Login> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                     const SizedBox(
+                      const SizedBox(
                         child: const Align(
                           alignment: Alignment.topLeft,
                           child: Padding(
@@ -153,9 +153,11 @@ class _LoginState extends State<Login> {
                                                 "Por favor, verifica tu correo antes de ingresar.")),
                                       );
                                       Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => EmailVerification()),
-);
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EmailVerification()),
+                                      );
                                     }
                                   } else {
                                     // Error de login
@@ -167,14 +169,14 @@ class _LoginState extends State<Login> {
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white.withOpacity(.2),
+                                  backgroundColor: Colors.white.withOpacity(.4),
                                   fixedSize: Size(screenWidth * 0.7, 50),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
                                 child: Text(
-                                  'iniciar sesion',
+                                  'iniciar sesión',
                                   style: GoogleFonts.biryani(
                                       color: Colors.white, fontSize: 20),
                                 ),

@@ -92,7 +92,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white.withOpacity(.2),
+                                  backgroundColor: Colors.white.withOpacity(.4),
                                   fixedSize: Size(screenWidth * 0.7, 50),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -130,7 +130,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white.withOpacity(.2),
+                                  backgroundColor: Colors.white.withOpacity(.4),
                                   fixedSize: Size(screenWidth * 0.7, 50),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),

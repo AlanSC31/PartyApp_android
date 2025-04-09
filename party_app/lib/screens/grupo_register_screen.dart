@@ -3,6 +3,7 @@ import 'package:party_app/screens/email_verification.dart';
 import 'package:party_app/widgets/authentication.dart';
 import 'package:party_app/widgets/gradient_background.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:party_app/widgets/queries.dart';
 
 class GrupoRegister extends StatefulWidget {
   const GrupoRegister({super.key});
@@ -17,7 +18,6 @@ class _GrupoRegisterState extends State<GrupoRegister> {
   final nameController = TextEditingController();
   final genreController = TextEditingController();
   final rateController = TextEditingController();
-
 
   final auth = AuthService();
 
@@ -58,17 +58,17 @@ class _GrupoRegisterState extends State<GrupoRegister> {
                       SizedBox(
                         height: screenHeight * 0.3,
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 100),
+                          padding: const EdgeInsets.only(top: 1),
                           child: Image.asset(
                             'assets/logo_title.png',
-                            height: 220,
+                            height: 200,
                             width: 300,
                           ),
                         ),
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 40),
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(20),
@@ -177,7 +177,8 @@ class _GrupoRegisterState extends State<GrupoRegister> {
                                   focusedBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
                                   ),
-                                  prefixIcon: const Icon(Icons.music_note_outlined,
+                                  prefixIcon: const Icon(
+                                      Icons.music_note_outlined,
                                       color: Colors.white),
                                 ),
                               ),
@@ -186,7 +187,8 @@ class _GrupoRegisterState extends State<GrupoRegister> {
                               padding: const EdgeInsets.only(
                                   top: 20, left: 20, right: 20),
                               child: TextField(
-                                controller: genreController,
+                                keyboardType: TextInputType.number,
+                                controller: rateController,
                                 cursorColor: Colors.white,
                                 style: GoogleFonts.biryani(color: Colors.white),
                                 decoration: InputDecoration(
@@ -201,7 +203,8 @@ class _GrupoRegisterState extends State<GrupoRegister> {
                                   focusedBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.white),
                                   ),
-                                  prefixIcon: const Icon(Icons.attach_money_sharp,
+                                  prefixIcon: const Icon(
+                                      Icons.attach_money_sharp,
                                       color: Colors.white),
                                 ),
                               ),
@@ -210,35 +213,62 @@ class _GrupoRegisterState extends State<GrupoRegister> {
                               padding: const EdgeInsets.only(top: 40.0),
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  final result = await auth.registerWithEmail(
-                                      emailController.text,
-                                      passwordController.text,
-                                      context);
+                                  if (emailController.text.isNotEmpty &&
+                                      passwordController.text.isNotEmpty &&
+                                      nameController.text.isNotEmpty &&
+                                      genreController.text.isNotEmpty &&
+                                      rateController.text.isNotEmpty) {
+                                    final result = await auth.registerWithEmail(
+                                        emailController.text,
+                                        passwordController.text,
+                                        context);
 
-                                  if (result != null) {
-                                    final user = result.user;
+                                    if (result != null) {
+                                      final user = result.user;
 
-                                    if (user != null && !user.emailVerified) {
-                                      await user.sendEmailVerification();
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Se envió un correo de verificación a ${user.email}')),
-                                      );
+                                      if (user != null && !user.emailVerified) {
+                                        await user.sendEmailVerification();
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'Se envió un correo de verificación a ${user.email}')),
+                                        );
+                                      }
+
+                                      bool grupoReg =
+                                          await Queries.grupoRegister(
+                                              email: emailController.text,
+                                              nombre: nameController.text,
+                                              genero: genreController.text,
+                                              password: passwordController.text,
+                                              tipo: 'grupo',
+                                              rate: double.parse(
+                                                  rateController.text));
+                                      if (grupoReg) {
+                                        print(
+                                            "Registro exitoso. UID: ${result.user?.uid}");
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const EmailVerification()),
+                                        );
+                                      }
                                     }
-
-                                    print(
-                                        "Registro exitoso. UID: ${result.user?.uid}");
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const EmailVerification()),
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        backgroundColor: Colors.red,
+                                        content:
+                                            Text('Completa todos los campos'),
+                                        duration: Duration(seconds: 2),
+                                      ),
                                     );
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white.withOpacity(.3),
+                                  backgroundColor: Colors.white.withOpacity(.4),
                                   fixedSize: Size(screenWidth * 0.7, 50),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
