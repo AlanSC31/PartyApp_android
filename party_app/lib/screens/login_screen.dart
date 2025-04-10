@@ -43,7 +43,7 @@ class _LoginState extends State<Login> {
                   child: Column(
                     children: [
                       const SizedBox(
-                        child: const Align(
+                        child: Align(
                           alignment: Alignment.topLeft,
                           child: Padding(
                             padding: EdgeInsets.only(top: 10),
