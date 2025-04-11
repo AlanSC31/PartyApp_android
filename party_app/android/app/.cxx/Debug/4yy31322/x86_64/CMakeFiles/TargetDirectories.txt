@@ -1,0 +1,2 @@
+C:/Users/Antho/Downloads/Projects/PartyApp_android/party_app/android/app/.cxx/Debug/4yy31322/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Antho/Downloads/Projects/PartyApp_android/party_app/android/app/.cxx/Debug/4yy31322/x86_64/CMakeFiles/rebuild_cache.dir

@@ -1,3 +1,5 @@
 {
-    "cmake.sourceDirectory": "C:/Users/Antho/Downloads/Projects/PartyApp_android/party_app/windows"
+    "cmake.sourceDirectory": "C:/Users/Antho/Downloads/Projects/PartyApp_android/party_app/windows",
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

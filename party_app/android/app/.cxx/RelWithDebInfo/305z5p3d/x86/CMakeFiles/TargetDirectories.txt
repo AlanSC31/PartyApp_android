@@ -1,0 +1,2 @@
+C:/Users/Antho/Downloads/Projects/PartyApp_android/party_app/android/app/.cxx/RelWithDebInfo/305z5p3d/x86/CMakeFiles/edit_cache.dir
+C:/Users/Antho/Downloads/Projects/PartyApp_android/party_app/android/app/.cxx/RelWithDebInfo/305z5p3d/x86/CMakeFiles/rebuild_cache.dir
