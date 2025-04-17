@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:party_app/screens/config/ipChange.dart';
+import 'package:party_app/widgets/ip_change.dart';
 
 class Queries {
   // static String ip = '10.0.2.2'; //localhost: 10.0.2.2

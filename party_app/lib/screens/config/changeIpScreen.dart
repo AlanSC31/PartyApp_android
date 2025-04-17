@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:party_app/screens/config/ipChange.dart';
+import 'package:party_app/widgets/ip_change.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
