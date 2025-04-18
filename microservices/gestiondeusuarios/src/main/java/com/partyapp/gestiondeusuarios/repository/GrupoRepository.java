@@ -8,4 +8,6 @@ import com.partyapp.gestiondeusuarios.model.Grupo;
 @Repository
 public interface GrupoRepository extends JpaRepository<Grupo, Long>{
     Grupo findByEmail(String email);
+    Grupo findByUid(String uid);
+
 }

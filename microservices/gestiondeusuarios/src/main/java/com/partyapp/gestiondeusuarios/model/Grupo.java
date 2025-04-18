@@ -12,6 +12,7 @@ public class Grupo{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    private String uid;
     private String name;
     private String email;
     private String password;
@@ -27,6 +28,14 @@ public class Grupo{
 
     public void setId(Long id){
         this.id = id;
+    }
+
+    public String getUid(){
+        return uid;
+    }
+
+    public void setUid(String uid){
+        this.uid = uid;
     }
 
     public String getName(){

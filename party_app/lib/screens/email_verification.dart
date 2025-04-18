@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:party_app/screens/home_screen.dart';
+import 'package:party_app/screens/grupo/navigation_bar.dart';
 import 'package:party_app/widgets/gradient_background.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -83,7 +83,7 @@ class _EmailVerificationState extends State<EmailVerification> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) => const Home()));
+                                            builder: (_) => const HomeScreen()));
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(

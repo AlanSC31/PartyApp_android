@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:party_app/screens/email_verification.dart';
-import 'package:party_app/screens/home_screen.dart';
+import 'package:party_app/screens/grupo/navigation_bar.dart';
 import 'package:party_app/widgets/authentication.dart';
 import 'package:party_app/widgets/gradient_background.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -142,7 +142,7 @@ class _LoginState extends State<Login> {
                                       Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => const Home()),
+                                            builder: (context) => const HomeScreen()),
                                       );
                                     } else {
                                       // Correo no verificado

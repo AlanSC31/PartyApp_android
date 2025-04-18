@@ -211,6 +211,7 @@ class _UsuarioRegisterState extends State<UsuarioRegister> {
                                               nombre: nameController.text,
                                               apellido: lastNameController.text,
                                               password: passwordController.text,
+                                              uid: result.user!.uid,
                                               tipo: 'usuario');
 
                                       if (userReg) {

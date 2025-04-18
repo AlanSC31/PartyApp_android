@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:party_app/screens/login_screen.dart';
-import 'package:party_app/screens/register_screen.dart';
 import 'package:party_app/widgets/gradient_background2.dart';
+import 'package:party_app/widgets/image_grid.dart';
+import 'package:party_app/widgets/queries.dart';
 
 class InfoScreen extends StatefulWidget {
   const InfoScreen({super.key});
@@ -11,140 +12,264 @@ class InfoScreen extends StatefulWidget {
   State<InfoScreen> createState() => _InfoScreenState();
 }
 
+final nameController = TextEditingController();
+final emailController = TextEditingController();
+final genreController = TextEditingController();
+final rateController = TextEditingController();
+
+String? errorMessage;
+Color inputsColor = const Color.fromARGB(255, 145, 152, 161);
+Color inactiveColor = const Color.fromARGB(255, 145, 152, 161);
+Color activeColor = Colors.white;
+
+bool isReadOnly = true;
+String editProfile = 'Editar información';
+
+bool a = true;
+
 class _InfoScreenState extends State<InfoScreen> {
-  int _selectedIndex = 0;
+  String? uid; 
+
+  @override
+  void initState() {
+    super.initState();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      uid = user.uid;
+      loadUserInfo(); // Llamamos hasta tener el UID
+    } else {
+      print("No hay ningún usuario autenticado");
+    }
+  }
+
+  final Queries queries = Queries();
+  Future<void> loadUserInfo() async {
+    if (uid == null) return;
+    final userInfo = await queries.getGrupoInfo(uid!);
+    nameController.text = userInfo?['name'] ?? '';
+    emailController.text = userInfo?['email'] ?? '';
+    genreController.text = userInfo?['genre'] ?? '';
+    rateController.text = (userInfo?['rate'] ?? 0.0).toStringAsFixed(2) + ' / hora'; 
 
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text('Index 0: Home'),
-    Text('Index 1: Business'),
-    Text('Index 2: School'),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    print(userInfo);
   }
 
   @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
+
+    
+    
+    void _changeColor(Color color) {
+      setState(() {
+        inputsColor = color;
+      });
+    }
 
     return MaterialApp(
       title: 'PartyApp',
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Información del grupo',
-            style: GoogleFonts.biryani(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          backgroundColor: const Color(0xFF7A82B5),
-          elevation: 1,
-        ),
-        resizeToAvoidBottomInset: true,
         body: GradientBackground2(
-          child: SafeArea(
-            child: _selectedIndex == 0
-                ? SingleChildScrollView(
-                   padding: const EdgeInsets.only(bottom: 440),
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 40),
-                          padding: const EdgeInsets.only(top: 40),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 40, left: 20, right: 20),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const Login()),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Colors.white.withOpacity(.4),
-                                    fixedSize: Size(screenWidth * 0.7, 50),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'iniciar sesión',
-                                    style: GoogleFonts.biryani(
-                                        color: Colors.white, fontSize: 20),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 40, left: 20, right: 20),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const RegisterScreen()),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        Colors.white.withOpacity(.4),
-                                    fixedSize: Size(screenWidth * 0.7, 50),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'registrarme',
-                                    style: GoogleFonts.biryani(
-                                        color: Colors.white, fontSize: 20),
-                                  ),
-                                ),
-                              ),
-                            ],
+            child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 60, left: 50, right: 50, bottom: 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.4),
+                          spreadRadius: 5,
+                          blurRadius: 50,
+                          offset: const Offset(0, 20),
+                        )
+                      ]),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20, bottom: 20),
+                        child: Image.asset('assets/grupo_pp.png',
+                            width: 150, height: 150),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: nameController,
+                          readOnly: isReadOnly,
+                          cursorColor: Colors.white,
+                          style: TextStyle(color: inputsColor),
+                          decoration: InputDecoration(
+                            hintText: 'nombre del grupo',
+                            hintStyle:
+                                TextStyle(color: inactiveColor, fontSize: 15),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: inputsColor),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: inputsColor),
+                            ),
+                            prefixIcon:
+                                Icon(Icons.groups_outlined, color: inputsColor),
                           ),
                         ),
-                      ],
-                    ),
-                  )
-                : Center(child: _widgetOptions[_selectedIndex]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: emailController,
+                          readOnly: isReadOnly,
+                          cursorColor: Colors.white,
+                          keyboardType: TextInputType.emailAddress,
+                          style: TextStyle(color: inputsColor),
+                          decoration: InputDecoration(
+                            hintText: 'email',
+                            hintStyle:
+                                TextStyle(color: inactiveColor, fontSize: 15),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: inputsColor),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: inputsColor),
+                            ),
+                            prefixIcon: Icon(Icons.alternate_email_rounded,
+                                color: inputsColor),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: genreController,
+                          readOnly: isReadOnly,
+                          cursorColor: Colors.white,
+                          style: TextStyle(color: inputsColor),
+                          decoration: InputDecoration(
+                            hintText: 'genero(s)',
+                            hintStyle:
+                                TextStyle(color: inactiveColor, fontSize: 15),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: inputsColor),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: inputsColor),
+                            ),
+                            prefixIcon: Icon(Icons.music_note_outlined,
+                                color: inputsColor),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: rateController,
+                          readOnly: isReadOnly,
+                          cursorColor: Colors.white,
+                          style: TextStyle(color: inputsColor),
+                          decoration: InputDecoration(
+                            hintText: 'tarifa / hora',
+                            hintStyle:
+                                TextStyle(color: inactiveColor, fontSize: 15),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: inputsColor),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: inputsColor),
+                            ),
+                            prefixIcon: Icon(Icons.attach_money_sharp,
+                                color: inputsColor),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 30, bottom: 10),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                elevation: 10,
+                                fixedSize: Size(screenWidth * 0.5, 30),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15)),
+                                backgroundColor: const Color(0xFF7A82B5)),
+                            onPressed: () {
+                              setState(() {
+                                if (editProfile == 'Editar información') {
+                                  _changeColor(activeColor);
+                                  isReadOnly = false;
+                                  editProfile = 'Guardar';
+                                } else {
+                                  if (a == true) {
+                                    _changeColor(inactiveColor);
+                                    isReadOnly = true;
+                                    editProfile = 'Editar información';
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                              'Información actualizada'),
+                                          content: const Text(
+                                              'Tu información se actualizó con exito.'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              child: const Text('Ok'),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                }
+                              });
+                            },
+                            child: Text(editProfile,
+                                style: GoogleFonts.robotoCondensed(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold))),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 20, left: 50, right: 50, bottom: 20),
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.4),
+                          spreadRadius: 5,
+                          blurRadius: 50,
+                          offset: const Offset(0, 20),
+                        )
+                      ]),
+                  child: const Column(
+                    children: [
+                      ImageGrid()
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Inicio',
-              backgroundColor: Colors.white
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Negocio',
-              backgroundColor: Colors.white
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: 'Escuela',
-              backgroundColor: Colors.white
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.white,
-          onTap: _onItemTapped,
-          backgroundColor: const Color(0xFF7A82B5),
-        ),
+        )),
       ),
     );
   }

@@ -243,6 +243,7 @@ class _GrupoRegisterState extends State<GrupoRegister> {
                                               genero: genreController.text,
                                               password: passwordController.text,
                                               tipo: 'grupo',
+                                              uid: result.user!.uid,
                                               rate: double.parse(
                                                   rateController.text));
                                       if (grupoReg) {

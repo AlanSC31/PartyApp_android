@@ -45,8 +45,8 @@ public class GrupoService {
    }
 
    // Grupo info
-   public Grupo userInfo(String email) throws Exception {
-    Grupo grupo = grupoRep.findByEmail(email);
+   public Grupo userInfo(String uid) throws Exception {
+    Grupo grupo = grupoRep.findByUid(uid);
 
     if(grupo == null){
         throw new Exception("Grupo no encontrado");

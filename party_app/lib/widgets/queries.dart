@@ -14,7 +14,8 @@ class Queries {
     required String nombre,
     required String apellido,
     required String password,
-    required String tipo
+    required String tipo,
+    required String uid
   }) async {
     
     final ip = await BackendConfig.getBackendIp();
@@ -27,6 +28,7 @@ class Queries {
       "email": email,
       "password": password,
       "type": tipo,
+      "uid": uid,
     });
 
     final response = await http.post(url,
@@ -53,6 +55,7 @@ class Queries {
     required String password,
     required String tipo,
     required double rate,
+    required String uid,
   }) async {
     final ip = await BackendConfig.getBackendIp();
     final String grupoUrl = 'http://$ip:8082/groups';  // grupos endpoint 
@@ -65,6 +68,7 @@ class Queries {
       "password": password,
       "type": tipo,
       "rate": rate,
+      "uid": uid,
     });
 
     final response = await http.post(url,
@@ -80,4 +84,27 @@ class Queries {
       return false; 
     }
   }
+
+  // grupo info
+  Future<Map<String, dynamic>?> getGrupoInfo(String uid) async {
+    final ip = await BackendConfig.getBackendIp();
+    final String grupoUrl = 'http://$ip:8082/groups';  // grupos endpoint 
+    final url = Uri.parse('$grupoUrl/info?uid=$uid');
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      print('Error: ${response.statusCode} - ${response.body}');
+      return null;
+    }
+  }
+
+
 }
