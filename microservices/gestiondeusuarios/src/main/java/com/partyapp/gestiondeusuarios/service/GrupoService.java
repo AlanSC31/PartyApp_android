@@ -54,5 +54,21 @@ public class GrupoService {
     return grupo;
    }
 
-   
+   // grupo update 
+   public Grupo updatedGrupo(Grupo updatedGrupo) throws Exception {
+    Grupo grupo = grupoRep.findByUid(updatedGrupo.getUid());
+
+    if (grupo == null) {
+        throw new Exception("grupo no encontrado");
+    }
+
+    grupo.setName(updatedGrupo.getName());
+    grupo.setEmail(updatedGrupo.getEmail());
+    grupo.setGenre(updatedGrupo.getGenre());
+    grupo.setRate(updatedGrupo.getRate());
+
+    return grupoRep.save(grupo);
+}
+
+ 
 }

@@ -50,8 +50,20 @@ public class GrupoController {
         }
     }
 
+    // show info
     @GetMapping("/info")
     public Grupo getUserInfo(@RequestParam String uid) throws Exception {
         return grupoServ.userInfo(uid);
+    }
+
+    // update info
+    @PostMapping("/grupo-update")
+    public ResponseEntity<String> updateGrupo(@RequestBody Grupo grupo) {
+        try {
+            grupoServ.updatedGrupo(grupo);
+            return ResponseEntity.ok("Información del grupo actualizada exitosamente.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la información del grupo: " + e.getMessage());
+        }
     }
 }

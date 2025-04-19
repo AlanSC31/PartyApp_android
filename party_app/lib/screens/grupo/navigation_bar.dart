@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:party_app/screens/grupo/chat_screen.dart';
 import 'package:party_app/screens/grupo/info_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,7 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   static const List<String> _appBarTitles = [
     'Información del grupo',
-    'Pendientes asignados',
+    'Mensajes',
     'Solicitudes',
     'Mi perfil',
   ];
@@ -22,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _widgetOptions() {
     return <Widget>[
       const InfoScreen(),
-      // AssignmentsTutor(userEmail: widget.email),
+      const GrupoChat(),
       // MessagesTutor(userEmail: widget.email),
       // MyProfile(userEmail: widget.email),
     ];
@@ -62,8 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Información',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_outlined),
-            label: 'Pendientes',
+            icon: Icon(Icons.chat_rounded),
+            label: 'Chat',
           ),
         ],
         backgroundColor: const Color(0xFF7A82B5),
