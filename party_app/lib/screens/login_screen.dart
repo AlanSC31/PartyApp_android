@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:party_app/screens/email_verification.dart';
 import 'package:party_app/screens/grupo/navigation_bar.dart';
+import 'package:party_app/screens/usuario/navigation_bar.dart';
 import 'package:party_app/widgets/authentication.dart';
 import 'package:party_app/widgets/gradient_background.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:party_app/widgets/queries.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -136,16 +138,34 @@ class _LoginState extends State<Login> {
                                         ?.reload();
                                     final user =
                                         FirebaseAuth.instance.currentUser;
-
                                     if (user != null && user.emailVerified) {
-                                      // Todo bien, va al Home
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => const HomeScreen()),
-                                      );
+                                      final type = await Queries.getAccountType(
+                                          user.email!);
+                                    print(type);
+
+                                      if (type == 'usuario') {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const UserHomeScreen()),
+                                        );
+                                      } else if (type == 'grupo') {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const GrupoHomeScreen()),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  "Tipo de cuenta no reconocido")),
+                                        );
+                                      }
                                     } else {
-                                      // Correo no verificado
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
@@ -160,7 +180,6 @@ class _LoginState extends State<Login> {
                                       );
                                     }
                                   } else {
-                                    // Error de login
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(

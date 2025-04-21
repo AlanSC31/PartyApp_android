@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:party_app/screens/grupo/navigation_bar.dart';
+import 'package:party_app/screens/usuario/navigation_bar.dart';
 import 'package:party_app/widgets/gradient_background.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:party_app/widgets/queries.dart';
 
 class EmailVerification extends StatefulWidget {
   const EmailVerification({super.key});
@@ -80,10 +82,34 @@ class _EmailVerificationState extends State<EmailVerification> {
                                   if (FirebaseAuth.instance.currentUser
                                           ?.emailVerified ??
                                       false) {
-                                    Navigator.pushReplacement(
+                                    final user =
+                                        FirebaseAuth.instance.currentUser;
+                                    final type = await Queries.getAccountType(
+                                        user!.email!);
+                                    print(type);
+
+                                    if (type == 'usuario') {
+                                      Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) => const HomeScreen()));
+                                            builder: (context) =>
+                                                const UserHomeScreen()),
+                                      );
+                                    } else if (type == 'grupo') {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const GrupoHomeScreen()),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                "Tipo de cuenta no reconocido")),
+                                      );
+                                    }
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(

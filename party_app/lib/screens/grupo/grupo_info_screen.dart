@@ -475,7 +475,7 @@ class _InfoScreenState extends State<InfoScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    top: 20, left: 50, right: 50, bottom: 20),
+                    top: 10, left: 50, right: 50, bottom: 20),
                 child: Container(
                   width: double.infinity,
                   decoration: BoxDecoration(

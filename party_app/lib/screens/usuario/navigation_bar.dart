@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:party_app/screens/grupo/grupo_chat_screen.dart';
-import 'package:party_app/screens/grupo/grupo_info_screen.dart';
+import 'package:party_app/screens/usuario/usuario_account.dart';
 
-class GrupoHomeScreen extends StatefulWidget {
-  const GrupoHomeScreen({super.key});
+class UserHomeScreen extends StatefulWidget {
+  const UserHomeScreen({super.key});
 
   @override
-  State<GrupoHomeScreen> createState() => _GrupoHomeScreenState();
+  State<UserHomeScreen> createState() => _UserHomeScreenState();
 }
 
-class _GrupoHomeScreenState extends State<GrupoHomeScreen> {
+class _UserHomeScreenState extends State<UserHomeScreen> {
   static const List<String> _appBarTitles = [
-    'Información del grupo',
+    'Mi información',
     'Mensajes',
     'Solicitudes',
     'Mi perfil',
@@ -22,7 +22,7 @@ class _GrupoHomeScreenState extends State<GrupoHomeScreen> {
 
   List<Widget> _widgetOptions() {
     return <Widget>[
-      const InfoScreen(),
+      const AccountUserScreen(),
       const GrupoChat(),
       // MessagesTutor(userEmail: widget.email),
       // MyProfile(userEmail: widget.email),
@@ -58,9 +58,9 @@ class _GrupoHomeScreenState extends State<GrupoHomeScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.groups_2,
+              Icons.person,
             ),
-            label: 'Información',
+            label: 'Cuenta',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat_rounded),
