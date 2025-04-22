@@ -12,11 +12,13 @@ public class Grupo{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    private String uid;
     private String name;
     private String email;
     private String password;
     private String genre;
     private Double rate;
+    private String type;
 
     // Getters and Setters
 
@@ -26,6 +28,14 @@ public class Grupo{
 
     public void setId(Long id){
         this.id = id;
+    }
+
+    public String getUid(){
+        return uid;
+    }
+
+    public void setUid(String uid){
+        this.uid = uid;
     }
 
     public String getName(){
@@ -68,8 +78,17 @@ public class Grupo{
         this.rate = rate;
     }
 
+    public String getType(){
+        return type;
+    }
 
+    public void setType(String type){
+        this.type = type;
+    }
 }
+
+
+
 
 
 

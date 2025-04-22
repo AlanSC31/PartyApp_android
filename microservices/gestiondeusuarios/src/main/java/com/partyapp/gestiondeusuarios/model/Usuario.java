@@ -13,10 +13,12 @@ public class Usuario{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+    private String uid;
     private String name;
     private String lastName;
     private String email;
     private String password;
+    private String type;
 
     //Getters and Setters
     public Long getId(){
@@ -25,6 +27,17 @@ public class Usuario{
 
     public void setId(Long id){
         this.id = id;
+    }
+
+    public String getUid(){
+        return uid;
+    }
+
+    public void setUid(String uid){
+        this.uid = uid;
+    }
+    public void setName(String name){
+        this.name = name;
     }
 
     public String getName(){
@@ -57,5 +70,13 @@ public class Usuario{
 
     public void setPassword(String password){
         this.password = password;
+    }
+
+    public String getType(){
+        return type;
+    }
+
+    public void setType(String type){
+        this.type = type;
     }
 }

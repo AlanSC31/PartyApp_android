@@ -3,9 +3,11 @@ package com.partyapp.gestiondeusuarios.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.partyapp.gestiondeusuarios.model.Grupo;
@@ -16,7 +18,7 @@ public class GrupoController {
     @Autowired
     private GrupoService grupoServ;
     
-    // Usuario register    
+    // Grupo register    
     @PostMapping("/grupo-register")
     public ResponseEntity<String> registerGroup(@RequestBody Grupo grupo){
         try {
@@ -27,7 +29,7 @@ public class GrupoController {
         }
     }
 
-    // Usuario login
+    // Grupo login
     @PostMapping("/grupo-login")
     public ResponseEntity<Object> login(@RequestBody Grupo grupo){
         try {
@@ -45,6 +47,23 @@ public class GrupoController {
                 case "Contraseña incorrecta" -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Credenciales incorrectas");
                 default -> ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error inesperado: " + errorMsg);
             };
+        }
+    }
+
+    // show info
+    @GetMapping("/info")
+    public Grupo getUserInfo(@RequestParam String uid) throws Exception {
+        return grupoServ.userInfo(uid);
+    }
+
+    // update info
+    @PostMapping("/grupo-update")
+    public ResponseEntity<String> updateGrupo(@RequestBody Grupo grupo) {
+        try {
+            grupoServ.updatedGrupo(grupo);
+            return ResponseEntity.ok("Información del grupo actualizada exitosamente.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la información del grupo: " + e.getMessage());
         }
     }
 }
