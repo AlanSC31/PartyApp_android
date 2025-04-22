@@ -148,7 +148,6 @@ class _AccountUserScreenState extends State<AccountUserScreen> {
                               backgroundColor: const Color.fromARGB(255, 226, 86, 76),
                             ),
                             onPressed: () {
-                              // Mostrar el cuadro de confirmación
                               _showConfirmLogoutDialog();
                             },
                             child: Text(

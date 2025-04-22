@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:party_app/screens/grupo/grupo_chat_screen.dart';
+import 'package:party_app/screens/usuario/catalogo.dart';
 import 'package:party_app/screens/usuario/usuario_account.dart';
 
 class UserHomeScreen extends StatefulWidget {
@@ -12,20 +13,19 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   static const List<String> _appBarTitles = [
-    'Mi información',
+    'Catalogo',
     'Mensajes',
-    'Solicitudes',
-    'Mi perfil',
+    'Mi cuenta',
   ];
 
   int _selectedIndex = 0;
 
   List<Widget> _widgetOptions() {
     return <Widget>[
-      const AccountUserScreen(),
+      const Catalog(),
       const GrupoChat(),
-      // MessagesTutor(userEmail: widget.email),
-      // MyProfile(userEmail: widget.email),
+      const AccountUserScreen(),
+
     ];
   }
 
@@ -58,14 +58,19 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.person,
+              Icons.music_note_rounded,
             ),
-            label: 'Cuenta',
+            label: 'Catalogo',
           ),
-          BottomNavigationBarItem(
+                    BottomNavigationBarItem(
             icon: Icon(Icons.chat_rounded),
             label: 'Chat',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_2_rounded),
+            label: 'Mi cuenta',
+          ),
+
         ],
         backgroundColor: const Color(0xFF7A82B5),
         currentIndex: _selectedIndex,

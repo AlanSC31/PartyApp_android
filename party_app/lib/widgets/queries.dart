@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:party_app/widgets/ip_change.dart';
+import 'package:party_app/widgets/profile_model.dart';
 
 class Queries {
   // static String ip = '10.0.2.2'; //localhost: 10.0.2.2
@@ -340,4 +342,75 @@ class Queries {
       return false;
     }
   }
+
+// show profiles
+  static final StreamController<List<Profile>> _profileStreamController =
+      StreamController<List<Profile>>.broadcast();
+
+  static Stream<List<Profile>> get profileStream =>
+      _profileStreamController.stream;
+
+  static Future<void> fetchProfiles() async {
+    final ip = await BackendConfig.getBackendIp();
+    final String profileUrl = 'http://$ip:8084/profiles/profile-retrieve';
+
+    try {
+      final response = await http.get(
+        Uri.parse(profileUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+        List<Profile> profiles = data
+            .map((e) => Profile.fromJson(e))
+            .where((profile) => profile.availability != 'no disponible')
+            .toList();
+        _profileStreamController.add(profiles);
+      } else {
+        print('Error: ${response.statusCode} - ${response.body}');
+        _profileStreamController.addError('Error al obtener perfiles');
+      }
+    } catch (e) {
+      print('Error de conexión: $e');
+      _profileStreamController.addError('Error de conexión');
+    }
+  }
+
+  static void dispose() {
+    _profileStreamController.close();
+  }
+  
+  // profile by uid
+    static Future<Profile?> fetchProfileByUid(String uid) async {
+    final ip = await BackendConfig.getBackendIp();
+    final String profileUrl = 'http://$ip:8084/profiles';
+    final url = Uri.parse('$profileUrl/profile-retrieve-by-uid?uid=$uid');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return Profile.fromJson(data);
+      } else {
+        print('Error al obtener perfil por UID: ${response.statusCode} - ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print('Error de conexión al obtener perfil por UID: $e');
+      return null;
+    }
+  }
+
+
+
+
 }

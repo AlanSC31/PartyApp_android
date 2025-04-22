@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:party_app/screens/landing_screen.dart';
+import 'package:party_app/widgets/authentication.dart';
 import 'package:party_app/widgets/gradient_background2.dart';
 import 'package:party_app/widgets/image_grid.dart';
 import 'package:party_app/widgets/queries.dart';
@@ -46,7 +48,7 @@ class _InfoScreenState extends State<InfoScreen> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       uid = user.uid;
-      loadUserInfo(); 
+      loadUserInfo();
       loadCardInfo();
     } else {
       print("No hay ningún usuario autenticado");
@@ -64,7 +66,7 @@ class _InfoScreenState extends State<InfoScreen> {
     print(userInfo);
   }
 
-    Future<void> loadCardInfo() async {
+  Future<void> loadCardInfo() async {
     if (uid == null) return;
     final cardInfo = await queries.getCardInfo(uid!);
     cardNameController.text = cardInfo?['name'] ?? '';
@@ -72,6 +74,39 @@ class _InfoScreenState extends State<InfoScreen> {
     cardDateController.text = cardInfo?['date'] ?? '';
     cvvController.text = cardInfo?['cvv'].toString() ?? '';
     print(cardInfo);
+  }
+
+  final auth = AuthService();
+
+  void _showConfirmLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('¿Estás seguro?'),
+          content: const Text('¿Quieres cerrar sesión?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                auth.signOut();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const LandingScreen()),
+                );
+              },
+              child: const Text('Sí'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el cuadro de confirmación
+              },
+              child: const Text('No'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -504,7 +539,30 @@ class _InfoScreenState extends State<InfoScreen> {
                   ),
                 ),
               ),
-              
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 10,
+                    fixedSize: Size(screenWidth * 0.5, 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    backgroundColor: const Color.fromARGB(255, 226, 86, 76),
+                  ),
+                  onPressed: () {
+                    _showConfirmLogoutDialog();
+                  },
+                  child: Text(
+                    'Cerrar sesión',
+                    style: GoogleFonts.robotoCondensed(
+                      fontSize: 15,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         )),
