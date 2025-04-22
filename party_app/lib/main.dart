@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:party_app/screens/landing_screen.dart';
@@ -5,6 +6,14 @@ import 'package:party_app/screens/landing_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+=======
+
+import 'package:flutter/material.dart';
+import 'package:party_app/screens/usuario_register_screen.dart';
+
+void main(){
+  WidgetsFlutterBinding.ensureInitialized();
+>>>>>>> 1b83d721954090d75f5e72ea75156ecf7059650b
   runApp(const MyApp());
 }
 
@@ -20,7 +29,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
+<<<<<<< HEAD
       home: LandingScreen(),
     );
   }
 }
+=======
+      home: UsuarioRegister(),
+    );
+  }
+}
+>>>>>>> 1b83d721954090d75f5e72ea75156ecf7059650b
