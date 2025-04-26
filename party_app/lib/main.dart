@@ -5,6 +5,7 @@ import 'package:party_app/screens/landing_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  
   runApp(const MyApp());
 }
 

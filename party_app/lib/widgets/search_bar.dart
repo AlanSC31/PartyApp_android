@@ -6,11 +6,11 @@ class CustomSearchBar extends StatelessWidget {
   final TextEditingController? controller;
 
   const CustomSearchBar({
-    Key? key,
+    super.key,
     required this.onChanged,
     this.hintText = 'Buscar...',
     this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class CustomSearchBar extends StatelessWidget {
           prefixIcon: Icon(Icons.search, color: Colors.grey[700]),
           suffixIcon: controller != null && controller!.text.isNotEmpty
               ? IconButton(
-                  icon: Icon(Icons.clear),
+                  icon: const Icon(Icons.clear),
                   onPressed: () {
                     controller!.clear(); // Limpiar el campo de texto
                     onChanged(''); // Pasar texto vacío para filtrar todo
@@ -34,7 +34,7 @@ class CustomSearchBar extends StatelessWidget {
               : null,
           filled: true,
           fillColor: Colors.grey[200],
-          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide.none,

@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:party_app/screens/usuario/navigation_bar.dart';
 import 'package:party_app/widgets/gradient_background2.dart';
 import 'package:party_app/widgets/profile_model.dart';
-import 'package:party_app/widgets/queries.dart'; // Asegúrate de tener acceso a tu fuente de datos
+import 'package:party_app/widgets/queries.dart';
 
 class BandDetailScreen extends StatefulWidget {
   final String uid;
@@ -15,10 +18,12 @@ class BandDetailScreen extends StatefulWidget {
 
 class _BandDetailScreenState extends State<BandDetailScreen> {
   Profile? profile;
+  final currentUserUid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   void initState() {
     super.initState();
+    
     _fetchProfileDetails(widget.uid);
   }
 
@@ -37,6 +42,30 @@ class _BandDetailScreenState extends State<BandDetailScreen> {
     setState(() {
       profile = perfil;
     });
+  }
+
+  String getChatId(String user1, String user2) {
+    return user1.hashCode <= user2.hashCode
+        ? '${user1}_$user2'
+        : '${user2}_$user1';
+  }
+
+  Future<void> createChatIfNotExists(String uid1, String uid2) async {
+    final chatId = getChatId(uid1, uid2);
+    final chatRef = FirebaseFirestore.instance.collection('chats').doc(chatId);
+
+    final chatSnapshot = await chatRef.get();
+
+    if (!chatSnapshot.exists) {
+      await chatRef.set({
+        'participants': [uid1, uid2],
+        'lastMessage': '',
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+      print('Nuevo chat creado con ID: $chatId');
+    } else {
+      print('El chat ya existe con ID: $chatId');
+    }
   }
 
   final List<String> imagenes = [
@@ -99,9 +128,7 @@ class _BandDetailScreenState extends State<BandDetailScreen> {
                         children: [
                           const SizedBox(height: 20),
                           _buildDetailRow('Nombre del grupo', profile!.name),
-                          _buildDetailRow('Género', profile!.genre),
-                          _buildDetailRow(
-                              'Disponibilidad', profile!.availability),
+                          _buildDetailRow('Género(s)', profile!.genre),
                           _buildDetailRow(
                               'Tarifa / hora', '\$${profile!.rate.toString()}'),
                         ],
@@ -165,10 +192,111 @@ class _BandDetailScreenState extends State<BandDetailScreen> {
                 const SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(25.0)),
+                        ),
+                        builder: (context) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              top: 20,
+                              bottom:
+                                  MediaQuery.of(context).viewInsets.bottom + 20,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Datos de la Tarjeta',
+                                  style: GoogleFonts.robotoCondensed(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                const TextField(
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    labelText: 'Número de tarjeta',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                const TextField(
+                                  decoration: InputDecoration(
+                                    labelText: 'Nombre del titular',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                const Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          labelText: 'Expira MM/AA',
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: TextField(
+                                        obscureText: true,
+                                        decoration: InputDecoration(
+                                          labelText: 'CVV',
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                ElevatedButton.icon(
+                                  onPressed: () async {
+                                    // Navigator.pop(
+                                    //     context); 
+                                    await Future.delayed(Duration(
+                                        milliseconds: 300)); 
+                                    await createChatIfNotExists(
+                                        currentUserUid, widget.uid);
+
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const UserHomeScreen()),
+                                    );
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Pago procesado. ¡Gracias!')),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.lock),
+                                  label: const Text('Pagar'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    minimumSize:
+                                        const Size(double.infinity, 50),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
+                        backgroundColor: Colors.green, elevation: 20),
                     child: Text('Contratar',
                         style: GoogleFonts.robotoCondensed(
                           fontSize: 20,

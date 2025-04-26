@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:party_app/screens/grupo/grupo_chat_screen.dart';
 import 'package:party_app/screens/usuario/catalogo.dart';
+import 'package:party_app/screens/usuario/usuario_chat_screen.dart';
 import 'package:party_app/screens/usuario/usuario_account.dart';
 
 class UserHomeScreen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   List<Widget> _widgetOptions() {
     return <Widget>[
       const Catalog(),
-      const GrupoChat(),
+      const UsuarioChat(),
       const AccountUserScreen(),
 
     ];

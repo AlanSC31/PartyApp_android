@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:party_app/widgets/ip_change.dart';
 import 'package:party_app/widgets/profile_model.dart';
@@ -63,7 +64,7 @@ class Queries {
   }
 
   // usuario info
-  Future<Map<String, dynamic>?> getUsuarioInfo(String uid) async {
+  static Future<Map<String, dynamic>?> getUsuarioInfo(String uid) async {
     final ip = await BackendConfig.getBackendIp();
     final String usuarioUrl = 'http://$ip:8082/users'; // grupos endpoint
     final url = Uri.parse('$usuarioUrl/info?uid=$uid');
@@ -157,9 +158,9 @@ class Queries {
   }
 
   // grupo info
-  Future<Map<String, dynamic>?> getGrupoInfo(String uid) async {
+  static Future<Map<String, dynamic>?> getGrupoInfo(String uid) async {
     final ip = await BackendConfig.getBackendIp();
-    final String grupoUrl = 'http://$ip:8082/groups'; // grupos endpoint
+    final String grupoUrl = 'http://$ip:8082/groups'; 
     final url = Uri.parse('$grupoUrl/info?uid=$uid');
 
     try {
@@ -382,9 +383,9 @@ class Queries {
   static void dispose() {
     _profileStreamController.close();
   }
-  
+
   // profile by uid
-    static Future<Profile?> fetchProfileByUid(String uid) async {
+  static Future<Profile?> fetchProfileByUid(String uid) async {
     final ip = await BackendConfig.getBackendIp();
     final String profileUrl = 'http://$ip:8084/profiles';
     final url = Uri.parse('$profileUrl/profile-retrieve-by-uid?uid=$uid');
@@ -401,7 +402,8 @@ class Queries {
         final data = jsonDecode(response.body);
         return Profile.fromJson(data);
       } else {
-        print('Error al obtener perfil por UID: ${response.statusCode} - ${response.body}');
+        print(
+            'Error al obtener perfil por UID: ${response.statusCode} - ${response.body}');
         return null;
       }
     } catch (e) {
@@ -410,7 +412,91 @@ class Queries {
     }
   }
 
+static Future<String?> checkAval(String uid) async {
+  final ip = await BackendConfig.getBackendIp();
+  final String profileUrl = 'http://$ip:8084/profiles';
+  final url = Uri.parse('$profileUrl/check-aval?uid=$uid');
 
+  try {
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    // Imprimir la respuesta para verificar qué tipo de contenido se recibe
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      // Aquí manejamos las respuestas de texto simple
+      return response.body; // Esto devuelve el texto plano recibido
+    } else {
+      print('Error al verificar disponibilidad: ${response.statusCode} - ${response.body}');
+      return null;
+    }
+  } catch (e) {
+    print('Error de conexión al verificar disponibilidad: $e');
+    return null;
+  }
+}
+
+ // change availability
+static Future<bool> changeAval({
+  required String uid,
+  required String aval,
+}) async {
+  final ip = await BackendConfig.getBackendIp();
+  final String profileUrl = 'http://$ip:8084/profiles';
+  final url = Uri.parse('$profileUrl/change-aval?uid=$uid&disponibilidad=$aval');  
+
+  try {
+    final response = await http.put(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      print('Error al cambiar disponibilidad: ${response.statusCode} - ${response.body}');
+      return false;
+    }
+  } catch (e) {
+    print('Error de conexión al cambiar disponibilidad: $e');
+    return false;
+  }
+}
+
+// CHAT
+static Future<void> sendMessage({
+  required String chatId,
+  required String senderId,
+  required String text,
+}) async {
+  final message = {
+    'senderId': senderId,
+    'message': text,
+    'timestamp': FieldValue.serverTimestamp(),
+  };
+
+  await FirebaseFirestore.instance
+      .collection('chats')
+      .doc(chatId)
+      .collection('messages')
+      .add(message);
+}
+
+static Stream<QuerySnapshot> getMessages(String chatId) {
+  return FirebaseFirestore.instance
+      .collection('chats')
+      .doc(chatId)
+      .collection('messages')
+      .orderBy('timestamp', descending: false)
+      .snapshots();
+}
 
 
 }

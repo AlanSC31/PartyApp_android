@@ -25,7 +25,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void _saveIp() async {
     await BackendConfig.setBackendIp(_controller.text);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('IP guardada correctamente')),
+      const SnackBar(content: Text('IP guardada correctamente')),
     );
   }
 

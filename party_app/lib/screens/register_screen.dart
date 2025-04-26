@@ -27,8 +27,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 10),
                             child: BackButton(color: Colors.white),
                           ),
                           Expanded(

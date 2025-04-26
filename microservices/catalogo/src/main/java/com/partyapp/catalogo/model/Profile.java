@@ -44,7 +44,7 @@ public class Profile{
         this.genre = genre;
     }
 
-    public String getavAilability(){
+    public String getAvailability(){
         return availability;
     }
 

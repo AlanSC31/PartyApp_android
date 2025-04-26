@@ -247,7 +247,7 @@ class _GrupoRegisterState extends State<GrupoRegister> {
                                               rate: double.parse(
                                                   rateController.text));
 
-                                      bool createProfile = await Queries.createProfile(name: nameController.text, availability: 'Disponible', genre: genreController.text, rate: rateController.text, uid: result.user!.uid);
+                                      bool createProfile = await Queries.createProfile(name: nameController.text, availability: 'no disponible', genre: genreController.text, rate: rateController.text, uid: result.user!.uid);
                                       if (grupoReg && createProfile) {
                                         print(
                                             "Registro exitoso. UID: ${result.user?.uid}");

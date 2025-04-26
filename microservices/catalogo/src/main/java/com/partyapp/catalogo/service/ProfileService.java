@@ -27,11 +27,27 @@ public class ProfileService {
 
     // retrieve profile by uid
     public Profile retrieveProfileByUid(String uid) throws Exception {
-      Profile profile = profileRep.findByUid(uid); 
-      if (profile == null) {
-         throw new Exception("Perfil no encontrado con el UID: " + uid);
-      }
-      return profile;
-   }
+        Profile profile = profileRep.findByUid(uid);
+        if (profile == null) {
+            throw new Exception("Perfil no encontrado con el UID: " + uid);
+        }
+        return profile;
+    }
+
+    // retrieve availability
+    public String checkAval(String uid) throws Exception {
+        Profile profile = profileRep.findByUid(uid);
+        if (profile == null) {
+            throw new Exception("Perfil no encontrado con el UID: " + uid);
+        }
+        return profile.getAvailability();
+    }
+
+    // change availability
+    public Profile changeAval(String uid, String aval) {
+        Profile profile = profileRep.findByUid(uid);
+        profile.setAvailability(aval);
+        return profileRep.save(profile);
+    }
 
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:party_app/screens/usuario/banda_details_screen.dart';
 import 'package:party_app/widgets/gradient_background2.dart';
 import 'package:party_app/widgets/profile_model.dart';
@@ -28,17 +29,25 @@ class _CatalogState extends State<Catalog> {
           _filteredProfiles = profiles;
         });
       }
+
+      for (var profile in profiles) {
+        print(
+            'Perfil: ${profile.name}, Disponibilidad: ${profile.availability}');
+      }
     });
   }
 
-  void _filterProfiles(String query) {
-    setState(() {
-      _filteredProfiles = _allProfiles.where((profile) {
-        return profile.name.toLowerCase().contains(query.toLowerCase()) ||
-            profile.genre.toLowerCase().contains(query.toLowerCase());
-      }).toList();
-    });
-  }
+void _filterProfiles(String query) {
+  setState(() {
+    _filteredProfiles = _allProfiles.where((profile) {
+      return (profile.name.toLowerCase().contains(query.toLowerCase()) ||
+              profile.genre.toLowerCase().contains(query.toLowerCase())) &&
+          profile.availability.toLowerCase() == 'disponible'; // Filtrar por disponibilidad
+    }).toList();
+  });
+  print("Perfiles filtrados: ${_filteredProfiles.length}"); // Verifica cuántos perfiles están siendo mostrados
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,45 +60,57 @@ class _CatalogState extends State<Catalog> {
               child: CustomSearchBar(
                 controller: _searchController,
                 onChanged: (text) {
-                  _filterProfiles(text); // Filtrar perfiles cuando el texto cambie
+                  _filterProfiles(text);
                 },
               ),
             ),
             Expanded(
-              child: StreamBuilder<List<Profile>>(
-                stream: Queries.profileStream,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || _filteredProfiles.isEmpty) {
-                    return const Center(child: Text('No hay perfiles disponibles'));
-                  }
-
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: _filteredProfiles.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          print(_filteredProfiles[index].uid);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BandDetailScreen(
-                                uid: _filteredProfiles[index].uid, 
-                              ),
-                            ),
-                          );
-                        },
-                        child: _buildProfileCard(_filteredProfiles[index]),
-                      );
-                    },
+                child: StreamBuilder<List<Profile>>(
+              stream: Queries.profileStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || _filteredProfiles.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No hay perfiles disponibles',
+                      style: GoogleFonts.robotoCondensed(
+                        fontSize: 15,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   );
-                },
-              ),
-            ),
+                }
+
+                List<Profile> availableProfiles = snapshot.data!
+                    .where((profile) =>
+                        profile.availability.toLowerCase() == 'disponible')
+                    .toList();
+
+                return ListView.builder(
+                  padding: const EdgeInsets.only(top: 40, right: 20, left: 20, bottom: 20),
+                  itemCount: availableProfiles.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BandDetailScreen(
+                              uid: availableProfiles[index].uid,
+                            ),
+                          ),
+                        );
+                      },
+                      child: _buildProfileCard(availableProfiles[index]),
+                    );
+                  },
+                );
+              },
+            )),
           ],
         ),
       ),
@@ -139,53 +160,53 @@ class _CatalogState extends State<Catalog> {
                     profile.name,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 10),
-                   Text(
-                    'Género',
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.8),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400 ,
-                    ),
-                  ),
-                  
                   Text(
-                    profile.genre,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                   const SizedBox(height: 10),
-
-                  // Disponibilidad con color verde
-                  Text(
-                    'Disponibilidad',
+                    'Género(s)',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
+
                   Text(
-                    profile.availability,
-                    style: TextStyle(
-                      color: profile.availability.toLowerCase() == 'no disponible'
-                          ? Colors.red
-                          : Colors.green,
-                      fontSize: 18,
-                    ),
+                    profile.genre,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
                   ),
+                  const SizedBox(height: 10),
+
+                  // Text(
+                  //   'Disponibilidad',
+                  //   style: TextStyle(
+                  //     color: Colors.white.withOpacity(0.8),
+                  //     fontSize: 14,
+                  //     fontWeight: FontWeight.w400,
+                  //   ),
+                  // ),
+                  // Text(
+                  //   profile.availability,
+                  //   style: TextStyle(
+                  //     color:
+                  //         profile.availability.toLowerCase() == 'no disponible'
+                  //             ? Colors.red
+                  //             : Colors.green,
+                  //     fontSize: 18,
+                  //   ),
+                  // ),
                   const SizedBox(height: 10),
 
                   // Tarifa
                   Text(
                     'Tarifa / hora',
-                    style:  TextStyle(
+                    style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -194,9 +215,9 @@ class _CatalogState extends State<Catalog> {
                   Text(
                     '\$${profile.rate.toString()}',
                     style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -208,25 +229,23 @@ class _CatalogState extends State<Catalog> {
   }
 }
 
-
-  Widget _buildReadOnlyField(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: TextField(
-        readOnly: true,
-        controller: TextEditingController(text: value),
-        style: const TextStyle(color: Colors.white),
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: const TextStyle(color: Colors.white),
-          enabledBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-          ),
-          focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
-          ),
+Widget _buildReadOnlyField(String label, String value) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 10),
+    child: TextField(
+      readOnly: true,
+      controller: TextEditingController(text: value),
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(color: Colors.white),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
         ),
       ),
-    );
-  }
-
+    ),
+  );
+}

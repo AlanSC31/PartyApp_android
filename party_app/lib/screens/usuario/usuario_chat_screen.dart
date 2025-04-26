@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:party_app/screens/grupo/grupo_chat_detail.dart';
+import 'package:party_app/screens/usuario/usuario_chat_detail.dart';
 import 'package:party_app/widgets/gradient_background2.dart';
-import 'package:party_app/widgets/queries.dart';  // Asegúrate de importar el archivo donde tienes getUsuarioInfo
+import 'package:party_app/widgets/queries.dart';  
 
-class GrupoChat extends StatefulWidget {
-  const GrupoChat({super.key});
+class UsuarioChat extends StatefulWidget {
+  const UsuarioChat({super.key});
 
   @override
-  State<GrupoChat> createState() => _GrupoChatState();
+  State<UsuarioChat> createState() => _UsuarioChatState();
 }
 
-class _GrupoChatState extends State<GrupoChat> {
+class _UsuarioChatState extends State<UsuarioChat> {
   final currentUser = FirebaseAuth.instance.currentUser;
 
   final Map<String, String> _nombreCache = {};
@@ -25,15 +25,14 @@ class _GrupoChatState extends State<GrupoChat> {
         .snapshots();
   }
 
-Future<String> getNombreUsuario(String uid) async {
+Future<String> getNombreGrupo(String uid) async {
   if (_nombreCache.containsKey(uid)) return _nombreCache[uid]!;
 
-  final usuarioInfo = await Queries.getUsuarioInfo(uid); // Tu función existente
+  final usuarioInfo = await Queries.getGrupoInfo(uid); // Tu función existente
 
   if (usuarioInfo != null) {
     final nombre = usuarioInfo['name'] ?? '';
-    final apellido = usuarioInfo['lastName'] ?? '';
-    final nombreCompleto = '$nombre $apellido'.trim();
+    final nombreCompleto = '$nombre';
 
     _nombreCache[uid] = nombreCompleto;
     return nombreCompleto;
@@ -75,7 +74,7 @@ Future<String> getNombreUsuario(String uid) async {
                 );
 
                 return FutureBuilder<String>(
-                  future: getNombreUsuario(otherUserUid),
+                  future: getNombreGrupo(otherUserUid),
                   builder: (context, snapshot) {
                     final nombre = snapshot.data ?? 'Cargando...';
 
@@ -92,7 +91,7 @@ Future<String> getNombreUsuario(String uid) async {
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 10),
                           title: Text(
-                            "Evento de: \n $nombre",
+                            "Grupo: \n $nombre",
                             style: GoogleFonts.biryani(
                               color: Colors.white,
                               fontSize: 20,
@@ -105,7 +104,7 @@ Future<String> getNombreUsuario(String uid) async {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => GrupoChatDetail(
+                                builder: (_) => UsuarioChatDetail(
                                   otherUserUid: otherUserUid,
                                 ),
                               ),

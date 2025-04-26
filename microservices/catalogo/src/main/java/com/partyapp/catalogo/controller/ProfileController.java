@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -63,6 +64,28 @@ public class ProfileController {
     @GetMapping("/profile-retrieve-by-uid")
     public Profile retrieveProfileByUid(@RequestParam String uid) throws Exception {
         return profileServ.retrieveProfileByUid(uid);
+    }
+
+    // check availability
+    @GetMapping("/check-aval")
+    public ResponseEntity<?> checkDisponibilidad(@RequestParam String uid) {
+        try {
+            String aval = profileServ.checkAval(uid);
+            return ResponseEntity.ok(aval);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al verificar disponibilidad: " + e.getMessage());
+        }
+    }
+
+    // change availability 
+    @PutMapping("/change-aval")
+    public ResponseEntity<?> changeDisponibilidad(@RequestParam String uid, @RequestParam String disponibilidad) {
+        try {
+            Profile actualizado = profileServ.changeAval(uid, disponibilidad);
+            return ResponseEntity.ok(actualizado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error al cambiar disponibilidad: " + e.getMessage());
+        }
     }
 
 }

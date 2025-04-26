@@ -17,7 +17,7 @@ class Profile {
     return Profile(
       name: json['name'] ?? '',
       genre: json['genre'] ?? '',
-      availability: json['avAilability'] ?? '',
+      availability: json['availability'] ?? '',
       rate: json['rate'] ?? '',
       uid:json['uid'] ?? '',
     );

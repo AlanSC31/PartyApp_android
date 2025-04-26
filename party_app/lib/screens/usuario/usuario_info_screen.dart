@@ -41,7 +41,7 @@ class _UsuarioInfoScreenState extends State<UsuarioInfoScreen> {
   final Queries queries = Queries();
   Future<void> loadUserInfo() async {
     if (uid == null) return;
-    final userInfo = await queries.getUsuarioInfo(uid!);
+    final userInfo = await Queries.getUsuarioInfo(uid!);
     nameController.text = userInfo?['name'] ?? '';
     lastNameController.text = userInfo?['lastName'] ?? '';
     emailController.text = userInfo?['email'] ?? '';
@@ -54,7 +54,7 @@ class _UsuarioInfoScreenState extends State<UsuarioInfoScreen> {
     double screenWidth = MediaQuery.of(context).size.width;
     // double screenHeight = MediaQuery.of(context).size.height;
 
-    void _changeColor(Color color) {
+    void changeColor(Color color) {
       setState(() {
         inputsColor = color;
       });
@@ -198,12 +198,12 @@ class _UsuarioInfoScreenState extends State<UsuarioInfoScreen> {
                                 uid: uid!);
                             setState(() {
                               if (editProfile == 'Editar información') {
-                                _changeColor(activeColor);
+                                changeColor(activeColor);
                                 isReadOnly = false;
                                 editProfile = 'Guardar';
                               } else {
                                 if (success) {
-                                  _changeColor(inactiveColor);
+                                  changeColor(inactiveColor);
                                   isReadOnly = true;
                                   editProfile = 'Editar información';
                                   showDialog(

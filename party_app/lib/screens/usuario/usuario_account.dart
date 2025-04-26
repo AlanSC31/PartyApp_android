@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:party_app/screens/landing_screen.dart';
+import 'package:party_app/screens/usuario/payment_methods.dart';
 import 'package:party_app/screens/usuario/usuario_info_screen.dart';
 import 'package:party_app/widgets/authentication.dart';
 import 'package:party_app/widgets/gradient_background2.dart';
@@ -125,7 +126,14 @@ class _AccountUserScreenState extends State<AccountUserScreen> {
                               ),
                               backgroundColor: const Color(0xFF7A82B5),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                                Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PaymentMethods(),
+                                ),
+                              );
+                            },
                             child: Text(
                               'Mis metodos de pago',
                               style: GoogleFonts.robotoCondensed(

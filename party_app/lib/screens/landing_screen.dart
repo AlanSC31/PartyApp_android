@@ -19,7 +19,7 @@ class _LandingScreenState extends State<LandingScreen> {
   void _handleLogoTap() {
     final now = DateTime.now();
 
-    if (_lastTapTime == null || now.difference(_lastTapTime!) > Duration(seconds: 2)) {
+    if (_lastTapTime == null || now.difference(_lastTapTime!) > const Duration(seconds: 2)) {
       _tapCounter = 1;
     } else {
       _tapCounter++;
@@ -53,7 +53,7 @@ class _LandingScreenState extends State<LandingScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           height: screenHeight * 0.5,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 50),
